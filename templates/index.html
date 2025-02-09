@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="conversations">
+                <div class="list-header">
+                    <h3>对话历史</h3>
+                    <div class="list-actions">
+                        <button onclick="toggleSelectMode('conversations')" class="toggle-select">多选</button>
+                        <button onclick="deleteSelectedItems('conversations')" class="delete-selected" style="display: none;">删除所选</button>
+                    </div>
+                </div>
+                <button onclick="showNewConversationDialog()" class="new-conversation">新建对话</button>
+                <div id="conversationList"></div>
+            </div>
+            <div class="system-prompts">
+                <div class="list-header">
+                    <h3>系统角色</h3>
+                    <div class="list-actions">
+                        <button onclick="toggleSelectMode('system-prompts')" class="toggle-select">多选</button>
+                        <button onclick="deleteSelectedItems('system-prompts')" class="delete-selected" style="display: none;">删除所选</button>
+                    </div>
+                </div>
+                <div id="systemPromptList"></div>
+                <button onclick="showAddSystemPromptDialog()">添加系统角色</button>
+            </div>
+            <div class="prompts">
+                <div class="list-header">
+                    <h3>常用提示词</h3>
+                    <div class="list-actions">
+                        <button onclick="toggleSelectMode('prompts')" class="toggle-select">多选</button>
+                        <button onclick="deleteSelectedItems('prompts')" class="delete-selected" style="display: none;">删除所选</button>
+                    </div>
+                </div>
+                <div id="promptList"></div>
+                <button onclick="showAddPromptDialog()">添加提示词</button>
+            </div>
+            <div class="settings">
+                <h3>设置</h3>
+                <div class="api-key-setting">
+                    <label for="apiKeyInput">API Key:</label>
+                    <input type="password" id="apiKeyInput" placeholder="输入 Gemini API Key">
+                    <label for="modelSelect">模型:</label>
+                    <select id="modelSelect">
+                        <option value="gemini-2.0-pro-exp-02-05">Gemini Pro (默认)</option>
+                        <option value="gemini-2.0-flash-thinking-exp-01-21">Gemini Flash</option>
+                    </select>
+                    <button id="saveApiKey" class="save-btn">保存设置</button>
+                </div>
+            </div>
+        </div>
+        <div class="main">
+            <div class="system-prompt-editor">
+                <textarea id="systemPromptInput" placeholder="设置系统提示词..."></textarea>
+                <button onclick="updateSystemPrompt()">保存提示词</button>
+            </div>
+            <div id="chat-container"></div>
+            <div class="input-container">
+                <textarea id="userInput" placeholder="输入消息..."></textarea>
+                <button onclick="sendMessage()">发送</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+        marked.setOptions({
+            highlight: function(code, lang) {
+                if (lang && hljs.getLanguage(lang)) {
+                    return hljs.highlight(code, { language: lang }).value;
+                }
+                return hljs.highlightAuto(code).value;
+            },
+            breaks: true,
+            gfm: true
+        });
+    </script>
+    <script src="{{ url_for('static', filename='db.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html> 
